@@ -1,3 +1,8 @@
+import random
+import string
+import pylab
+import time
+
 def min(firstnum, *numbers):
     minimum = firstnum
     for num in numbers:
@@ -20,10 +25,10 @@ def levinstein(s1, s2):
             matrix[i][j] = min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1,
             matrix[i - 1][j - 1] + (s1[i - 1] != s2[j - 1]))
 
-    for i in range(n_matrix):
-        for j in range(m_matrix):
-            print(matrix[i][j], end = ' ')
-        print()
+    #for i in range(n_matrix):
+    #    for j in range(m_matrix):
+    #        print(matrix[i][j], end = ' ')
+    #    print()
     return matrix[n_matrix - 1][m_matrix - 1]
 
 def damerau_levinstein_matrix(s1, s2):
@@ -45,10 +50,10 @@ def damerau_levinstein_matrix(s1, s2):
                 matrix[i][j] = min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1,
                 matrix[i - 1][j - 1] + (s1[i - 1] != s2[j - 1]))
 
-    for i in range(n_matrix):
-        for j in range(m_matrix):
-            print(matrix[i][j], end = ' ')
-        print()
+    #for i in range(n_matrix):
+    #    for j in range(m_matrix):
+    #        print(matrix[i][j], end = ' ')
+    #    print()
     return matrix[n_matrix - 1][m_matrix - 1]
 
 def damerau_levinstein_recursive(s1, s2):
@@ -69,17 +74,61 @@ def damerau_levinstein_recursive(s1, s2):
     return min(delete, insert, replace, transposition)
 
 def main():
-    print("Введите строку 1")
-    s1 = input()
-    print("Введите строку 2")
-    s2 = input()
-    print()
-    
-    print("Левинштейн ", levinstein(s1, s2))
-    print()
-    print("Дамерау-Левинштейн матричным способом ", damerau_levinstein_matrix(s1, s2))
-    print()
-    print("Дамерау-Левинштейн рекурсивным способом ", damerau_levinstein_recursive(s1, s2))
+    print("Тесты - 1, графики - 2, ввод строки - 3? ")
+    c = input()
+    if ('1' == c):
+        list1 = ["dessert", "cook", "mother", "woman", "program", "house", "probelm", "head", "bring",
+        "happy", "minute", "person", "week", "member", "death", "education", "room", "car", "air", "country"]
+
+        list2 = ["desert", "cooker", "money", "water", "friend", "girl", "problem", "ehda", "brought",
+        "happy", "moment", "eye", "weeks", "morning", "health", "question", "moor", "city", "area", "office"]
+
+        for s1, s2 in zip(list1, list2):
+            print(s1, " & " , s2, " & " , levinstein(s1, s2), " & " , damerau_levinstein_matrix(s1, s2), " & " , damerau_levinstein_recursive(s1, s2))
+    elif ('2' == c):
+        xlist = []
+        ylist1 = []
+        ylist2 = []
+        ylist3 = []
+
+        for i in range (1, 4, 1):
+            s1 = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(i))
+            s2 = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(i))
+            xlist.append(i)
+
+            start_time = time.time()
+            levinstein(s1, s2)
+            ylist1.append(time.time() - start_time)
+
+            start_time = time.time()
+            damerau_levinstein_matrix(s1, s2)
+            ylist2.append(time.time() - start_time)
+
+            start_time = time.time()
+            damerau_levinstein_recursive(s1, s2)
+            ylist3.append(time.time() - start_time)
+
+            print(i)
+
+        pylab.plot(xlist, ylist1, color = 'red')
+        pylab.plot(xlist, ylist2, color = 'yellow')
+        pylab.plot(xlist, ylist3, color = 'blue')
+        pylab.show()
+
+    elif ('3' == c):
+        print("Введите строку 1")
+        s1 = input()
+        print("Введите строку 2")
+        s2 = input()
+        print()
+
+        print("Левинштейн ", levinstein(s1, s2))
+        print()
+        print("Дамерау-Левинштейн матричным способом ", damerau_levinstein_matrix(s1, s2))
+        print()
+        print("Дамерау-Левинштейн рекурсивным способом ", damerau_levinstein_recursive(s1, s2))
+    else:
+        print("Некорректно!")
 
 if __name__ == "__main__":
     main()
