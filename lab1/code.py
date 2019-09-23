@@ -91,7 +91,7 @@ def main():
         ylist2 = []
         ylist3 = []
 
-        for i in range (1, 5, 1):
+        for i in range (0, 5, 1):
             s1 = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(i))
             s2 = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(i))
             xlist.append(i)
@@ -112,9 +112,9 @@ def main():
 
         pylab.xlabel('Длина строки, символов')
         pylab.ylabel('Время, секунд')
-        pylab.plot(xlist, ylist1, color = 'red', label = 'Расстояние Дамерау матричным способом')
+        pylab.plot(xlist, ylist1, 'r--', label = 'Расстояние Дамерау матричным способом')
         pylab.plot(xlist, ylist2, color = 'yellow', label = 'Расстояние Дамерау-Левенштейна матричным способом')
-        pylab.plot(xlist, ylist3, color = 'blue', label = 'Расстояние Дамерау-Левенштейна рекурсивным способом')
+        pylab.plot(xlist, ylist3, 'b-.', label = 'Расстояние Дамерау-Левенштейна рекурсивным способом')
         pylab.legend(loc='upper left')
         pylab.show()
 
