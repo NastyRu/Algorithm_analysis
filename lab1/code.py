@@ -96,22 +96,23 @@ def main():
             s2 = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(i))
             xlist.append(i)
 
-            start_time = time.time()
+            start_time = time.process_time()
             levinstein(s1, s2)
-            ylist1.append(time.time() - start_time)
+            ylist1.append(time.process_time() - start_time)
 
-            start_time = time.time()
+            start_time = time.process_time()
             damerau_levinstein_matrix(s1, s2)
-            ylist2.append(time.time() - start_time)
+            ylist2.append(time.process_time() - start_time)
 
-            start_time = time.time()
+
+            start_time = time.process_time()
             damerau_levinstein_recursive(s1, s2)
-            ylist3.append(time.time() - start_time)
+            ylist3.append(time.process_time() - start_time)
 
             print(i)
 
-        pylab.xlabel('Длина строки, символов')
-        pylab.ylabel('Время, секунд')
+        pylab.xlabel('Длина строки, символы')
+        pylab.ylabel('Время, секунды')
         pylab.plot(xlist, ylist1, 'r--', label = 'Расстояние Дамерау матричным способом')
         pylab.plot(xlist, ylist2, color = 'yellow', label = 'Расстояние Дамерау-Левенштейна матричным способом')
         pylab.plot(xlist, ylist3, 'b-.', label = 'Расстояние Дамерау-Левенштейна рекурсивным способом')
