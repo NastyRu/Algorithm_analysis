@@ -27,14 +27,14 @@ def standart_multiplication_matrix(m1, m2):
         q = len(m2[0])
         m3 = [[0] * q for i in range(m)]
 
-        start_time = time.time()
+        start_time = time.process_time()
         for i in range(0, m):
             for j in range(0, q):
                 for k in range(0, n):
                     m3[i][j] = m3[i][j] + m1[i][k] * m2[k][j]
-        t = time.time() - start_time
+        t = time.process_time() - start_time
 
-    #print_matrix(m3)
+    print_matrix(m3)
     return t
 
 def vinograd_multiplication_matrix(m1, m2):
@@ -57,7 +57,7 @@ def vinograd_multiplication_matrix(m1, m2):
             for i in range(0, n // 2, 1):
                 col[j] = col[j] + m2[2 * i][j] * m2[2 * i + 1][j]
 
-        start_time = time.time()
+        start_time = time.process_time()
         for i in range(0, m):
             for j in range(0, q):
                 m3[i][j] = -row[i] - col[j]
@@ -65,9 +65,9 @@ def vinograd_multiplication_matrix(m1, m2):
                     m3[i][j] = m3[i][j] + (m1[i][2 * k + 1] + m2[2 * k][j]) * (m1[i][2 * k] + m2[2 * k + 1][j])
                 if 1 == n % 2:
                     m3[i][j] = m3[i][j] + m1[i][n - 1] * m2[n - 1][j]
-        t = time.time() - start_time
+        t = time.process_time() - start_time
 
-    #print_matrix(m3)
+    print_matrix(m3)
     return t
 
 def vinograd_optimizate_multiplication_matrix(m1, m2):
@@ -90,7 +90,7 @@ def vinograd_optimizate_multiplication_matrix(m1, m2):
             for i in range(1, n, 2):
                 col[j] -= m2[i][j] * m2[i - 1][j]
 
-        start_time = time.time()
+        start_time = time.process_time()
         for i in range(0, m):
             for j in range(0, q):
                 m3[i][j] = row[i] + col[j]
@@ -98,9 +98,9 @@ def vinograd_optimizate_multiplication_matrix(m1, m2):
                     m3[i][j] += (m1[i][k - 1] + m2[k][j]) * (m1[i][k] + m2[k - 1][j])
                 if 1 == n % 2:
                     m3[i][j] += m1[i][n - 1] * m2[n - 1][j]
-        t = time.time() - start_time
+        t = time.process_time() - start_time
 
-    #print_matrix(m3)
+    print_matrix(m3)
     return t
 
 def main():
@@ -152,7 +152,7 @@ def main():
         ylist2 = []
         ylist3 = []
 
-        '''for i in range (10, 210, 10):
+        for i in range (100, 1100, 100):
             m1 = make_matrix(i, i)
             m2 = make_matrix(i, i)
             ylist1.append(standart_multiplication_matrix(m1, m2))
@@ -161,18 +161,18 @@ def main():
             xlist.append(i)
             print(i)
 
-        pylab.xlabel('Размер матрицы, символов')
-        pylab.ylabel('Время, секунд')
-        pylab.plot(xlist, ylist1, color = 'red', label = 'Стандартный алгоритм')
+        pylab.xlabel('Размер матрицы, символы')
+        pylab.ylabel('Время, секунды')
+        pylab.plot(xlist, ylist1, 'r--', label = 'Стандартный алгоритм')
         pylab.plot(xlist, ylist2, color = 'yellow', label = 'Алгоритм Винограда')
-        pylab.plot(xlist, ylist3, color = 'blue', label = 'Оптимизированный алгоритм Винограда')
+        pylab.plot(xlist, ylist3, 'b-.', label = 'Оптимизированный алгоритм Винограда')
         pylab.legend(loc='upper left')
         pylab.show()
 
         xlist = []
         ylist1 = []
         ylist2 = []
-        ylist3 = []'''
+        ylist3 = []
 
         for i in range (101, 1101, 100):
             m1 = make_matrix(i, i)
@@ -183,11 +183,11 @@ def main():
             xlist.append(i)
             print(i)
 
-        pylab.xlabel('Размер матрицы, символов')
-        pylab.ylabel('Время, секунд')
-        pylab.plot(xlist, ylist1, color = 'red', label = 'Стандартный алгоритм')
+        pylab.xlabel('Размер матрицы, символы')
+        pylab.ylabel('Время, секунды')
+        pylab.plot(xlist, ylist1, 'r--', label = 'Стандартный алгоритм')
         pylab.plot(xlist, ylist2, color = 'yellow', label = 'Алгоритм Винограда')
-        pylab.plot(xlist, ylist3, color = 'blue', label = 'Оптимизированный алгоритм Винограда')
+        pylab.plot(xlist, ylist3, 'b-.', label = 'Оптимизированный алгоритм Винограда')
         pylab.legend(loc='upper left')
         pylab.show()
     else:
