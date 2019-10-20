@@ -24,6 +24,9 @@ def make_array_unsort(n):
     return array
 
 def bitwise_sorting(array):
+    if len(array) == 0:
+        print(arr)
+        return []
     n = len(str(abs(max(array))))
     digit = 10
     neg = sum(x < 0 for x in array)
@@ -53,7 +56,7 @@ def bitwise_sorting(array):
         i *= 10
     t = time.process_time() - start_time
 
-    #print(array)
+    print(array)
     return t
 
 def quick_sorting(array):
@@ -93,8 +96,11 @@ def main():
                 a = int(input())
                 array.append(a)
             except ValueError:
+                print("Поразрядная сортировка: ")
                 bitwise_sorting(array)
+                print("Быстрая сортировка: ")
                 print(quick_sorting(array))
+                print("Сортировка вставками: ")
                 print(insertion_sorting(array))
                 break
 
