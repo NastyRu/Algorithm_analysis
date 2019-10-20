@@ -8,7 +8,7 @@ def get_digit(number, n):
 def make_array(n):
     array = [0] * n
     for i in range(0, n):
-        array[i] = random.randint(-999, 1000)
+        array[i] = random.randint(-999, 10000)
     return array
 
 def make_array_sort(n):
@@ -23,32 +23,27 @@ def make_array_unsort(n):
         array[i] = n-i
     return array
 
-def bitwise_sorting(array, n):
-    sort = []
-    for i in range(10):
-        sort.append([])
-    for i in range(10):
-        sort[i].append(i)
+def bitwise_sorting(array):
+    n = len(str(abs(max(array))))
+    digit = 10
+    neg = sum(x < 0 for x in array)
 
-    neg = 0
-    for i in range(len(array)):
-        if (array[i] < 0):
-            neg += 1
-
-    n = pow(10, n)
+    n = pow(digit, n)
     i = 1
 
     start_time = time.process_time()
     while (i < n):
-        for j in range(len(array)):
-            sort[get_digit(array[j], i)].append(array[j])
+        sort = [[] for k in range(digit)]
+
+        for x in array:
+            sort[get_digit(x, i)].append(x)
 
         count = len(array)
         array = [0] * count
         u = 0
         w = 0
-        for k in range(10):
-            for j in range(1, len(sort[k])):
+        for k in range(digit):
+            for j in range(len(sort[k])):
                 if (sort[k][j] < 0):
                     array[w] = sort[k][j]
                     w += 1
@@ -56,11 +51,6 @@ def bitwise_sorting(array, n):
                     array[u + neg] = sort[k][j]
                     u += 1
         i *= 10
-        sort = []
-        for l in range(10):
-            sort.append([])
-        for l in range(10):
-            sort[l].append(l)
     t = time.process_time() - start_time
 
     #print(array)
@@ -95,18 +85,15 @@ def insertion_sorting(array):
 
 def main():
     array = []
-    digits = []
     print("1 - Вводимый массив, 2 - Графики")
     c = input()
     if ('1' == c):
         while True:
             try:
                 a = int(input())
-                n = len(str(abs(a)))
                 array.append(a)
-                digits.append(n)
             except ValueError:
-                bitwise_sorting(array, max(digits))
+                bitwise_sorting(array)
                 print(quick_sorting(array))
                 print(insertion_sorting(array))
                 break
@@ -117,13 +104,13 @@ def main():
         ylist2 = []
         ylist3 = []
 
-        for i in range (0, 200, 1):
+        for i in range (1, 1000, 100):
             t1 = 0
             t2 = 0
             t3 = 0
             for j in range(50):
                 array = make_array(i)
-                t1 += bitwise_sorting(array, len(str(i)))
+                t1 += bitwise_sorting(array)
                 start_time = time.process_time()
                 quick_sorting(array)
                 t = time.process_time() - start_time
