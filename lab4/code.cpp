@@ -87,7 +87,7 @@ int vinograd_optimizate_multiplication_matrix(vector< vector<int> > m1, vector< 
       func_thread[i].join();
     }
     t2 = high_resolution_clock::now();
-    //cout << m3;
+    cout << m3;
     return duration_cast<microseconds>(t2 - t1).count();
   }
 
@@ -101,17 +101,28 @@ int main(int argc, char* argv[]) {
   if (2 == buf) {
     int m, n, k, q;
     cout << "Введите размерность матрицы 1 ";
-    cin >> m >> n;
+    while (!(cin >> m >> n) || m <= 0 || n <= 0){
+        cout << "Некорректно, попробуйте еще раз\n";
+        cin.clear();
+        fflush(stdin);
+    }
     cout << "Введите размерность матрицы 2 ";
-    cin >> k >> q;
-
+    while (!(cin >> k >> q) || (k <= 0 || q <= 0)){
+        cout << "Некорректно, попробуйте еще раз\n";
+        cin.clear();
+        fflush(stdin);
+    }
+    
     vector< vector<int> > matrix1 = rand_vector(m, n, -10, 10);
-    cout << matrix1;
+    cout << matrix1 << endl;
 
     vector< vector<int> > matrix2 = rand_vector(k, q, -10, 10);
-    cout << matrix2;
-
-    vinograd_optimizate_multiplication_matrix(matrix1, matrix2, 1);
+    cout << matrix2 << endl;
+    int potok = 1;
+    if (argc > 1) {
+      potok = atoi(argv[1]);
+    }
+    vinograd_optimizate_multiplication_matrix(matrix1, matrix2, potok);
   } else if (1 == buf) {
     for (int m = 100; m <= 1000; m += 100) {
       vector<int> time(15, 0);
