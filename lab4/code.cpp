@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
 
     vinograd_optimizate_multiplication_matrix(matrix1, matrix2, 1);
   } else if (1 == buf) {
-    for (int m = 100; m <= 1500; m += 100) {
+    for (int m = 100; m <= 1000; m += 100) {
       vector<int> time(15, 0);
       for (int k = 0; k < 5; k++) {
         vector< vector<int> > matrix1 = rand_vector(m, m, -10, 10);
