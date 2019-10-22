@@ -8,7 +8,7 @@ def get_digit(number, n):
 def make_array(n):
     array = [0] * n
     for i in range(0, n):
-        array[i] = random.randint(-999, 10000)
+        array[i] = random.randint(-9999, 9999)
     return array
 
 def make_array_sort(n):
@@ -56,7 +56,7 @@ def bitwise_sorting(array):
         i *= 10
     t = time.process_time() - start_time
 
-    print(array)
+    #print(array)
     return t
 
 def quick_sorting(array):
@@ -75,6 +75,30 @@ def quick_sorting(array):
             else:
                 middle.append(elem)
         return quick_sorting(left) + middle + quick_sorting(right)
+
+def partition(nums, low, high):
+    middle = nums[(low + high) // 2]
+    i = low - 1
+    j = high + 1
+    while True:
+        i += 1
+        while nums[i] < middle:
+            i += 1
+        j -= 1
+        while nums[j] > middle:
+            j -= 1
+        if i >= j:
+            return j
+        nums[i], nums[j] = nums[j], nums[i]
+
+def quicking_sort(items, low, high):
+    if low < high:
+        split_index = partition(items, low, high)
+        quicking_sort(items, low, split_index)
+        quicking_sort(items, split_index + 1, high)
+
+def quick_sort(nums):
+    quicking_sort(nums, 0, len(nums) - 1)
 
 def insertion_sorting(array):
 	for i in range(1, len(array)):
@@ -99,7 +123,8 @@ def main():
                 print("Поразрядная сортировка: ")
                 bitwise_sorting(array)
                 print("Быстрая сортировка: ")
-                print(quick_sorting(array))
+                quick_sort(array)
+                print(array)
                 print("Сортировка вставками: ")
                 print(insertion_sorting(array))
                 break
@@ -110,17 +135,18 @@ def main():
         ylist2 = []
         ylist3 = []
 
-        for i in range (1, 1000, 100):
+        for i in range (1, 200, 10):
             t1 = 0
             t2 = 0
             t3 = 0
             for j in range(50):
-                array = make_array(i)
+                array = make_array_unsort(i)
                 t1 += bitwise_sorting(array)
                 start_time = time.process_time()
-                quick_sorting(array)
+                quick_sort(array)
                 t = time.process_time() - start_time
                 t2 += t
+                array = make_array_unsort(i)
                 start_time = time.process_time()
                 insertion_sorting(array)
                 t = time.process_time() - start_time
