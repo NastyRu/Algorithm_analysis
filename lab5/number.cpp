@@ -1,8 +1,11 @@
 #include "number.h"
 
-Long_number::Long_number() {}
+Long_number::Long_number() {
+  error = true;
+}
 
 Long_number::Long_number(const Long_number& num) {
+  (*this).number.clear();
   (*this).mantissa = num.mantissa;
   (*this).znak = num.znak;
   (*this).error = num.error;
@@ -12,6 +15,7 @@ Long_number::Long_number(const Long_number& num) {
 }
 
 Long_number::Long_number(Long_number&& num) {
+  (*this).number.clear();
   (*this).mantissa = num.mantissa;
   (*this).znak = num.znak;
   (*this).error = num.error;
@@ -52,9 +56,10 @@ Long_number Long_number::operator/ (Long_number& number2) {
 
 void Long_number::division(Long_number n1, Long_number n2) {
   int precision = 10;
+  (*this).error = false;
 
   if (1 == n2.number.size() && 0 == n2.number[0]) {
-    printf("\nDivision by zero");
+    cout << "Division by zero" << endl;
     (*this).error = true;
     return;
   }
@@ -84,7 +89,7 @@ void Long_number::division(Long_number n1, Long_number n2) {
         n1.number[i] -= n2.number[i];
         if (n1.number[i] < 0 && i > k) {
           n1.number[i-1]--;
-          n1.number[i]+=10;
+          n1.number[i] += 10;
         }
       }
       if (n1.number[k] >= 0)
@@ -95,20 +100,20 @@ void Long_number::division(Long_number n1, Long_number n2) {
       n1.number[i] += n2.number[i];
       if (n1.number[i] > 9 && i > 0) {
         n1.number[i-1]++;
-        n1.number[i]-=10;
+        n1.number[i] -= 10;
       }
     }
 
     (*this).number.push_back(calc);
 
-    for (i = precision-1; i>0; i--)
-      n2.number[i] = n2.number[i-1];
+    for (i = precision - 1; i > 0; i--)
+      n2.number[i] = n2.number[i - 1];
 
     n2.number[k] = 0;
 
     if (calc && 0 == n1.number[k]) {
-      k+=1;
-      if (j > 0 && 0 == n1.number[j-1] && 0 == n1.number[k])
+      k += 1;
+      if (j > 0 && 0 == (*this).number[j - 1] && 0 == (*this).number[k])
         k++;
     }
   }
@@ -134,30 +139,34 @@ void Long_number::insignificant_nules() {
     mantissa = 0;
 }
 
-void Builder::build_number() {
+void Builder::build_number(string s) {
+  num.number.clear();
   num.mantissa = 0;
   num.znak = 0;
   num.error = true;
   char c = 0;
+  int pos = 0;
   vector<char> mantissa_count;
 
   int point = 0;
-  cout << "Введите число \n";
 
   // определение знака
-  scanf("%c", &c);
+  c = s[pos];
+  pos++;
   if ('-' == c) {
     num.znak = 1;
-    scanf("%c", &c);
+    c = s[pos];
+    pos++;
   } else if ('+' == c) {
-    scanf("%c", &c);
+    c = s[pos];
+    pos++;
   } else if (!((c <= '9' && c >= '0') || '.' == c)) {
     cout << "Некорректный ввод\n";
     return;
   }
 
   // считывание числа
-  while ('\n' != c && 'e' != c && 'E' != c) {
+  while (pos <= s.size() && 'e' != c && 'E' != c) {
     if (c <= '9' && c >= '0') {
       num.number.push_back((int)c - 48);
       if (point)
@@ -168,17 +177,19 @@ void Builder::build_number() {
       cout << "Некорректный ввод\n";
       return;
     }
-    scanf("%c", &c);
+    c = s[pos];
+    pos++;
   }
 
   // считывание мантиссы
-  while (c != '\n') {
-    scanf("%c", &c);
-    if (!((c <= '9' && c >= '0') || (0 == mantissa_count.size() && ('-' == c || '+' == c)) || '\n' == c)) {
+  while (pos < s.size()) {
+    c = s[pos];
+    pos++;
+    if (!((c <= '9' && c >= '0') || (0 == mantissa_count.size() && ('-' == c || '+' == c)) || '\0' == c)) {
       cout << "Некорректный ввод\n";
       return;
     }
-    if (c != '\n')
+    if (c != '\0')
       mantissa_count.push_back(c);
   }
 

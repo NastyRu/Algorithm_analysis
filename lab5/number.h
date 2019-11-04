@@ -49,7 +49,7 @@ public:
   Builder() {}
   ~Builder() {}
 
-  void build_number();
+  void build_number(string s);
   Long_number get_result();
 
 private:

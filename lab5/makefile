@@ -1,9 +1,9 @@
 CC := g++
 
-CFLAGS := -std=c++11 -Wall -Werror
+CFLAGS := -std=c++17 -Wall -Werror
 
 main.out: number.o main.o
-	g++ -std=c++11 $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c $<
