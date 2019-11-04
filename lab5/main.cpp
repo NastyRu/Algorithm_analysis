@@ -46,7 +46,7 @@ void thread1() {
     }
     builder.build_number(str1.front());
     str1.pop();
-    cout << 1 << ' ' << builder.get_result() << endl;
+    //cout << 1 << ' ' << builder.get_result() << endl;
     if (!builder.get_result().error) {
       data_lock.lock();
       nulesnumber1.push(builder.get_result());
@@ -64,7 +64,7 @@ void thread2() {
     }
     builder.build_number(str2.front());
     str2.pop();
-    cout << 2 << ' ' << builder.get_result() << endl;
+    //cout << 2 << ' ' << builder.get_result() << endl;
     if (!builder.get_result().error) {
       data_lock.lock();
       nulesnumber2.push(builder.get_result());
@@ -89,7 +89,7 @@ void thread3() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    cout << 3 << ' ' << num << endl;
+    //cout << 3 << ' ' << num << endl;
     data_lock.lock();
     number1.push(num);
     data_lock.unlock();
@@ -112,7 +112,7 @@ void thread4() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    cout << 4 << ' ' << num << endl;
+    //cout << 4 << ' ' << num << endl;
     data_lock.lock();
     number2.push(num);
     data_lock.unlock();
@@ -135,7 +135,7 @@ void thread5() {
     number2.pop();
     data_lock.unlock();
 
-    cout << 5 << ' ' << num << endl;
+    //cout << 5 << ' ' << num << endl;
     if (!num.error) {
       data_lock.lock();
       nulesnumber.push(num);
@@ -159,7 +159,7 @@ void thread6() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    cout << 6 << ' ' << num;
+    //cout << 6 << ' ' << num;
   }
 }
 
@@ -171,73 +171,81 @@ int main()
   auto ms = duration_cast<microseconds>(t2 - t1);
   cout << "Деление чисел \n";
 
-  string s;
-  for (int i = 0; i < 100000; i++) {
-    s = random_string();
-    str1.push(s);
-    cout << s << ' ';
-    s = random_string();
-    str2.push(s);
-    cout << s << endl;
+  queue<string> string1;
+  queue<string> string2;
+
+  for (int len = 50; len < 100; len+=10) {
+    cout << len << endl;
+    string s;
+    for (int i = 0; i < len; i++) {
+      s = random_string();
+      str1.push(s);
+      string1.push(s);
+      //cout << s << ' ';
+      s = random_string();
+      str2.push(s);
+      string2.push(s);
+      //cout << s << endl;
+    }
+
+    thread input1(thread1);
+    thread input2(thread2);
+    thread nules1(thread3);
+    thread nules2(thread4);
+    thread div(thread5);
+    thread nules(thread6);
+
+    t1 = high_resolution_clock::now();
+    input1.join();
+    input2.join();
+    nules1.join();
+    nules2.join();
+    div.join();
+    nules.join();
+    t2 = high_resolution_clock::now();
+    ms = duration_cast<microseconds>(t2 - t1);
+    cout << ms.count() << endl;
+
+    t1 = high_resolution_clock::now();
+
+    Long_number vspom_num;
+    Long_number vspom_num1;
+    Long_number vspom_num2;
+    Builder builder1;
+    Builder builder2;
+
+    while (0 == string1.empty() + string2.empty()) {
+      s = string1.front();
+      string1.pop();
+      builder1.build_number(s);
+      if (!builder1.get_result().error) {
+        vspom_num1 = builder1.get_result();
+        //cout << 1 << ' ' << vspom_num1 << endl;
+        vspom_num1.insignificant_nules();
+        //cout << 2 << ' ' << vspom_num1 << endl;
+      }
+
+      s = string2.front();
+      string2.pop();
+      builder2.build_number(s);
+      if (!builder2.get_result().error) {
+        vspom_num2 = builder2.get_result();
+        //cout << 3 << ' ' << vspom_num2 << endl;
+        vspom_num2.insignificant_nules();
+        //cout << 4 << ' ' << vspom_num2 << endl;
+      }
+
+      if (0 == vspom_num1.error + vspom_num2.error) {
+        vspom_num.division(vspom_num1, vspom_num2);
+        //cout << 5 << ' ' << vspom_num << endl;
+      }
+      if (!vspom_num.error) {
+        vspom_num.insignificant_nules();
+        //cout << 6 << ' ' << vspom_num << endl;
+      }
+    }
+    t2 = high_resolution_clock::now();
+    ms = duration_cast<microseconds>(t2 - t1);
+    cout << ms.count() << endl;
   }
-
-  thread input1(thread1);
-  thread input2(thread2);
-  thread nules1(thread3);
-  thread nules2(thread4);
-  thread div(thread5);
-  thread nules(thread6);
-
-  t1 = high_resolution_clock::now();
-  input1.join();
-  input2.join();
-  nules1.join();
-  nules2.join();
-  div.join();
-  nules.join();
-  t2 = high_resolution_clock::now();
-  ms = duration_cast<microseconds>(t2 - t1);
-  cout << ms.count();
-
-  /*t1 = high_resolution_clock::now();
-
-  Long_number vspom_num;
-  Long_number vspom_num1;
-  Long_number vspom_num2;
-  Builder builder1;
-  Builder builder2;
-
-  while (0 == str1.empty() + str2.empty()) {
-    s = str1.front();
-    str1.pop();
-    builder1.build_number(s);
-    if (!builder1.get_result().error) {
-      vspom_num1 = builder1.get_result();
-      //cout << 1 << ' ' << vspom_num1 << endl;
-      vspom_num1.insignificant_nules();
-      //cout << 2 << ' ' << vspom_num1 << endl;
-    }
-
-    s = str2.front();
-    str2.pop();
-    builder2.build_number(s);
-    if (!builder2.get_result().error) {
-      vspom_num2 = builder2.get_result();
-      //cout << 3 << ' ' << vspom_num2 << endl;
-      vspom_num2.insignificant_nules();
-      //cout << 4 << ' ' << vspom_num2 << endl;
-    }
-
-    if (0 == vspom_num1.error + vspom_num2.error) {
-      vspom_num.division(vspom_num1, vspom_num2);
-      //cout << 5 << ' ' << vspom_num << endl;
-    }
-    if (!vspom_num.error) {
-      vspom_num.insignificant_nules();
-      //cout << 6 << ' ' << vspom_num << endl;
-    }
-  }
-  t2 = high_resolution_clock::now();
-  ms = duration_cast<microseconds>(t2 - t1);
-  cout << ms.count() << endl;*/
 }
