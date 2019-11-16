@@ -59,7 +59,7 @@ void Long_number::division(Long_number n1, Long_number n2) {
   (*this).error = false;
 
   if (1 == n2.number.size() && 0 == n2.number[0]) {
-    cout << "Division by zero" << endl;
+    //cout << "Division by zero" << endl;
     (*this).error = true;
     return;
   }

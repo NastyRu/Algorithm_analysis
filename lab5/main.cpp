@@ -37,16 +37,21 @@ queue<Long_number> number1;
 queue<Long_number> number2;
 queue<Long_number> number;
 
+int sign = 0;
+
 void thread1() {
   Builder builder;
 
   while (true) {
     if (str1.empty()) {
+      sign++;
       return;
     }
     builder.build_number(str1.front());
     str1.pop();
-    //cout << 1 << ' ' << builder.get_result() << endl;
+    cout_lock.lock();
+    cout << 1 << ' ' << builder.get_result() << endl;
+    cout_lock.unlock();
     if (!builder.get_result().error) {
       data_lock.lock();
       nulesnumber1.push(builder.get_result());
@@ -60,11 +65,14 @@ void thread2() {
 
   while (true) {
     if (str2.empty()) {
+      sign++;
       return;
     }
     builder.build_number(str2.front());
     str2.pop();
-    //cout << 2 << ' ' << builder.get_result() << endl;
+    cout_lock.lock();
+    cout << 2 << ' ' << builder.get_result() << endl;
+    cout_lock.unlock();
     if (!builder.get_result().error) {
       data_lock.lock();
       nulesnumber2.push(builder.get_result());
@@ -78,7 +86,8 @@ void thread3() {
 
   while (true) {
     if (nulesnumber1.empty()) {
-      if (str1.empty()) {
+      if (sign >= 2) {
+        sign++;
         return;
       }
       continue;
@@ -89,7 +98,9 @@ void thread3() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    //cout << 3 << ' ' << num << endl;
+    cout_lock.lock();
+    cout << 3 << ' ' << num << endl;
+    cout_lock.unlock();
     data_lock.lock();
     number1.push(num);
     data_lock.unlock();
@@ -101,7 +112,8 @@ void thread4() {
 
   while (true) {
     if (nulesnumber2.empty()) {
-      if (str2.empty()) {
+      if (sign >= 3) {
+        sign++;
         return;
       }
       continue;
@@ -112,7 +124,9 @@ void thread4() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    //cout << 4 << ' ' << num << endl;
+    cout_lock.lock();
+    cout << 4 << ' ' << num << endl;
+    cout_lock.unlock();
     data_lock.lock();
     number2.push(num);
     data_lock.unlock();
@@ -124,7 +138,8 @@ void thread5() {
 
   while (true) {
     if (number1.empty() || number2.empty()) {
-      if (str1.empty() && str2.empty() && nulesnumber1.empty() && nulesnumber2.empty()) {
+      if (sign >= 4) {
+        sign++;
         return;
       }
       continue;
@@ -135,7 +150,9 @@ void thread5() {
     number2.pop();
     data_lock.unlock();
 
-    //cout << 5 << ' ' << num << endl;
+    cout_lock.lock();
+    cout << 5 << ' ' << num << endl;
+    cout_lock.unlock();
     if (!num.error) {
       data_lock.lock();
       nulesnumber.push(num);
@@ -148,7 +165,8 @@ void thread6() {
   Long_number num;
   while (true) {
     if (nulesnumber.empty()) {
-      if (str1.empty() && str2.empty() && nulesnumber1.empty() && nulesnumber2.empty() && number1.empty() && number2.empty()) {
+      if (sign >= 5) {
+        sign++;
         return;
       }
       continue;
@@ -159,24 +177,48 @@ void thread6() {
     data_lock.unlock();
     num.insignificant_nules();
 
-    //cout << 6 << ' ' << num;
+    cout_lock.lock();
+    cout << 6 << ' ' << num;
+    cout_lock.unlock();
   }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
   high_resolution_clock::time_point t1, t2;
   t1 = high_resolution_clock::now();
   t2 = high_resolution_clock::now();
+  string s;
   auto ms = duration_cast<microseconds>(t2 - t1);
   cout << "Деление чисел \n";
 
   queue<string> string1;
   queue<string> string2;
 
-  for (int len = 50; len < 100; len+=10) {
-    cout << len << endl;
-    string s;
+  if (1 == argc) {
+    cout << "Введите 1 число: \n";
+    cin >> s;
+    str1.push(s);
+
+    cout << "Введите 2 число: \n";
+    cin >> s;
+    str2.push(s);
+
+    thread input1(thread1);
+    thread input2(thread2);
+    thread nules1(thread3);
+    thread nules2(thread4);
+    thread div(thread5);
+    thread nules(thread6);
+
+    input1.join();
+    input2.join();
+    nules1.join();
+    nules2.join();
+    div.join();
+    nules.join();
+  } else {
+    int len = atoi(argv[1]);
     for (int i = 0; i < len; i++) {
       s = random_string();
       str1.push(s);
@@ -204,7 +246,7 @@ int main()
     nules.join();
     t2 = high_resolution_clock::now();
     ms = duration_cast<microseconds>(t2 - t1);
-    cout << ms.count() << endl;
+    cout << ms.count() << ' ';
 
     t1 = high_resolution_clock::now();
 
@@ -215,6 +257,7 @@ int main()
     Builder builder2;
 
     while (0 == string1.empty() + string2.empty()) {
+      //cout << string1.size() << endl;
       s = string1.front();
       string1.pop();
       builder1.build_number(s);
