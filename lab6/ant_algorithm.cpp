@@ -1,9 +1,6 @@
 #include "ant_algorithm.h"
 
-#define alpha 0.5
-#define beta 0.5
-
-int ant_algorithm(int **matrix, int n) {
+int ant_algorithm(int **matrix, int n, double alpha, double beta, int timemax, double rho) {
   srand(time(NULL));
   double **pheromone = new double * [n];
   for (int i = 0; i < n; i++) {
@@ -17,7 +14,7 @@ int ant_algorithm(int **matrix, int n) {
   int minlen = 1000;
   int minway[n];
 
-  for (int time = 0; time < 10; time++) {
+  for (int time = 0; time < timemax; time++) {
     int *ants = new int [n];
     for (int i = 0; i < n; i++) {
       ants[i] = i + 1;
@@ -88,17 +85,17 @@ int ant_algorithm(int **matrix, int n) {
 
     for (int i = 0; i < n - 1; i++) {
       for (int j = i + 1; j < n; j++) {
-        pheromone[i][j] *= (1 - 0.2);
+        pheromone[i][j] *= (1 - rho);
         pheromone[i][j] += delta[i][j];
       }
     }
   }
 
-  cout << "Минимальный путь муравьиным алгоритмом: \n";
+  /*cout << "Минимальный путь муравьиным алгоритмом: \n";
   for (int i = 0; i < n; i++) {
     cout << minway[i] + 1 << ' ';
   }
-  cout << endl;
+  cout << endl;*/
 
   return minlen;
 }

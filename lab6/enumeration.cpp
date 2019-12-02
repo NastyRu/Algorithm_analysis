@@ -1,6 +1,7 @@
 #include "enumeration.h"
 
 int mindistance = 10000;
+int minway[100];
 
 void fill_array(int *arr, int n) {
   for (int i = 0; i < n; i++) {
@@ -15,8 +16,11 @@ void distance(int **matrix, int *arr, int n) {
   }
   d += matrix[arr[n - 1]][arr[0]];
 
-  if (d < mindistance)
+  if (d < mindistance) {
     mindistance = d;
+    for (int i = 0; i < n; i++)
+      minway[i] = arr[i];
+  }
 }
 
 void swap(int *a, int *b) {
@@ -41,6 +45,10 @@ int enum_algorithm(int **matrix, int n) {
   int *arr = new int[n];
   fill_array(arr, n);
   permute(matrix, arr, 0, n - 1, n);
+  /*for (int i = 0; i < n; i++) {
+    cout << minway[i] + 1 << ' ';
+  }
+  cout << endl;*/
 
   return mindistance;
 }
