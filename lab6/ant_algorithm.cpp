@@ -91,11 +91,11 @@ int ant_algorithm(int **matrix, int n, double alpha, double beta, int timemax, d
     }
   }
 
-  /*cout << "Минимальный путь муравьиным алгоритмом: \n";
+  cout << "Минимальный путь муравьиным алгоритмом: \n";
   for (int i = 0; i < n; i++) {
     cout << minway[i] + 1 << ' ';
   }
-  cout << endl;*/
+  cout << endl;
 
   return minlen;
 }

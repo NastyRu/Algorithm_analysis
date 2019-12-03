@@ -45,10 +45,12 @@ int enum_algorithm(int **matrix, int n) {
   int *arr = new int[n];
   fill_array(arr, n);
   permute(matrix, arr, 0, n - 1, n);
-  /*for (int i = 0; i < n; i++) {
+
+  cout << "Минимальный путь полным перебором: \n";
+  for (int i = 0; i < n; i++) {
     cout << minway[i] + 1 << ' ';
   }
-  cout << endl;*/
+  cout << endl;
 
   return mindistance;
 }
