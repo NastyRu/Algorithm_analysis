@@ -23,52 +23,41 @@ def KMP(s, x):
         return i - j + 1
     return -1
 
-def forming_d(pattern):
-    """ Формируем массив d."""
-    d = [len(pattern) for i in range(256)]
-    new_p = pattern[::-1]
+def jump_array(x):
+    d = [len(x) for i in range(256)]
+    new_x = x[::-1]
 
-    for i in range(len(new_p)):
-        if d[ord(new_p[i])] != len(new_p):
-            continue
-        else:
-            d[ord(new_p[i])] = i
+    for i in range(len(new_x)):
+        d[ord(new_x[i])] = i
     return d
 
 
-def search(string, pattern):
-    """ Поиск Бойера - Мура."""
+def BM(s, x):
+    d = jump_array(x)
+    i = j = k = len(x)
 
-    d = forming_d(pattern)
-    # x - начало прохода по string
-    # j - проход по pattern
-    # k - проход по string
-    len_p = x = j = k = len(pattern)
-    # число смещений
-    counter = 0
-
-    while x <= len(string) and j > 0:
-        if pattern[j - 1] == string[k - 1]:
+    while i <= len(s) and j > 0:
+        if x[j - 1] == s[k - 1]:
             j -= 1
             k -= 1
         else:
-            x += d[ord(string[k - 1])]
-            k = x
-            j = len_p
-            counter += 1
+            i += d[ord(s[k - 1])]
+            k = i
+            j = len(x)
 
     if j <= 0:
-        return "Нашли. Число смещений равно %d." % counter
+        return k + 1
     else:
-        return "Не нашли!"
+        return -1
 
 def main():
+    print(ord('z'))
     print("Введите строку 1")
     s1 = input()
     print("Введите строку 2")
     s2 = input()
     print(KMP(s1, s2))
-    print(search(s1, s2))
+    print(BM(s1, s2))
 
 if __name__ == "__main__":
     main()
