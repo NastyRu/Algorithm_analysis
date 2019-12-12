@@ -35,18 +35,17 @@ def jump_array(x):
 def BM(s, x):
     d = jump_array(x)
     i = j = k = len(x)
-
-    while i <= len(s) and j > 0:
-        if x[j - 1] == s[k - 1]:
+    while k <= len(s) and j > 0:
+        if x[j - 1] == s[i - 1]:
             j -= 1
-            k -= 1
+            i -= 1
         else:
-            i += d[ord(s[k - 1])]
-            k = i
+            k += d[ord(s[i - 1])]
+            i = k
             j = len(x)
 
     if j <= 0:
-        return k + 1
+        return i + 1
     else:
         return -1
 
