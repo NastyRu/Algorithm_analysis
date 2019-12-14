@@ -259,20 +259,21 @@
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Алгоритм Бойера - Мура]
-    d = shift_array(x)
-    i = j = 0
-    while i < len(s) and j < len(x):
-        if x[j] == s[i]:
-            i += 1
-            j += 1
-        elif 0 == j:
-            i += 1
+    d = jump_array(x)
+    i = j = k = len(x)
+    while k <= len(s) and j > 0:
+        if x[j - 1] == s[i - 1]:
+            j -= 1
+            i -= 1
         else:
-            j = d[j - 1]
+            k += d[ord(s[i - 1])]
+            i = k
+            j = len(x)
 
-    if j == len(x):
-        return i - j + 1
-    return -1
+    if j <= 0:
+        return i + 1
+    else:
+        return -1
 \end{lstlisting}
 
 \subsection{Тестирование}
